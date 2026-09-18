@@ -21,7 +21,7 @@ function formatDate(dateStr: string) {
 ---
 
 <Layout title="Repositories">
-    <h1 class="page-title">Repositories</h1>
+    <h1 class="page-title"><a href="/repo/list" class="title-link">Repositories</a></h1>
     <div class="repo-list">
         {repos.map((repo) => (
             <a href={`/repo/${repo.name}`} class="repo-card">

@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getGithubRepos } from '../../lib/github';
+
+const repos = await getGithubRepos();
+---
+
+<Layout title="All Repositories">
+    <h1 class="page-title">All Repositories</h1>
+    <div class="url-list">
+        {repos.map((repo) => (
+            <a href={`/repo/${repo.name}`} class="url-item">
+                /repo/{repo.name} <span style="opacity: 0; transition: opacity 0.2s;">→</span>
+            </a>
+        ))}
+    </div>
+</Layout>
+
+<style>
+  .url-item:hover span {
+    opacity: 1 !important;
+  }
+</style>

@@ -3,6 +3,20 @@ import Layout from '../layouts/Layout.astro';
 import { getGithubRepos } from '../lib/github';
 
 const repos = await getGithubRepos();
+
+const langColors: Record<string, string> = {
+  JavaScript: '#f1e05a', TypeScript: '#3178c6', Python: '#3572A5',
+  Java: '#b07219', Rust: '#dea584', Go: '#00ADD8', C: '#555555',
+  'C++': '#f34b7d', HTML: '#e34c26', CSS: '#563d7c', Astro: '#ff5d01'
+};
+
+function getColor(lang: string | null) {
+	return lang ? (langColors[lang] || '#8b949e') : 'transparent';
+}
+
+function formatDate(dateStr: string) {
+	return new Date(dateStr).toLocaleDateString('en-US', {month: 'short', day: 'numeric'});;
+}
 ---
 
 <Layout title="Repositories">
@@ -12,6 +26,19 @@ const repos = await getGithubRepos();
             <a href={`/repo/${repo.name}`} class="repo-card">
                 <h2>{repo.name}</h2>
                 <p>{repo.description}</p>
+
+				<div class="repo-meta">
+                    {repo.language && (
+                        <span class="meta-item">
+                            <span class="lang-dot" style={`background-color: ${getColor(repo.language)}`}></span>
+                            {repo.language}
+                        </span>
+                    )}
+                    {repo.stargazers_count > 0 && (
+                        <span class="meta-item">★ {repo.stargazers_count}</span>
+                    )}
+                    <span class="meta-item">Updated {formatDate(repo.updated_at)}</span>
+                </div>
             </a>
         ))}
     </div>

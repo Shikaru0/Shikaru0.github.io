@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getGithubRepos } from '../../lib/github';
+import { GITHUB_USERNAME } from '../../config';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const repos = await getGithubRepos();
+  return repos.map((repo) => ({
+    params: { repo: repo.name },
+    props: { repo },
+  }));
+}
+
+const { repo } = Astro.props;
+
+let readmeHtml = '<p>README not found.</p>';
+try {
+  const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${repo.name}/${repo.default_branch}/README.md`);
+  if (res.ok) {
+    readmeHtml = await marked.parse(await res.text());
+  }
+} catch (error) {
+  console.error(`Failed to fetch README for ${repo.name}`);
+}
+---
+
+<Layout title={repo.name}>
+    <div class="repo-meta">
+        <h1>{repo.name}</h1>
+        <p>{repo.description} • <a href={repo.html_url} target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: none;">View on GitHub ↗</a></p>
+    </div>
+
+    <div class="readme-card">
+        <div class="readme-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+            README.md
+        </div>
+        <div class="readme-body">
+            <div class="markdown-body" set:html={readmeHtml} />
+        </div>
+    </div>
+</Layout>

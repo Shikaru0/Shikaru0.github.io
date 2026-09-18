@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Socials from '../components/Socials.astro';
+import ModrinthProjects from '../components/ModrinthProjects.astro';
 import { getGithubRepos } from '../lib/github';
 
 const repos = await getGithubRepos();
@@ -21,14 +22,21 @@ function formatDate(dateStr: string) {
 ---
 
 <Layout title="Repositories">
-    <h1 class="page-title"><a href="/repo/list" class="title-link">Repositories</a></h1>
+    <h1 class="page-title">Modrinth</h1>
+    <ModrinthProjects />
+
+    <hr />
+    <a href="/repo/list" class="title-link">
+        <h1 class="page-title">Repositories</h1>
+    </a>
+
     <div class="repo-list">
         {repos.map((repo) => (
             <a href={`/repo/${repo.name}`} class="repo-card">
                 <h2>{repo.name}</h2>
                 <p>{repo.description}</p>
 
-				<div class="repo-meta">
+                <div class="repo-meta">
                     {repo.language && (
                         <span class="meta-item">
                             <span class="lang-dot" style={`background-color: ${getColor(repo.language)}`}></span>
@@ -43,8 +51,7 @@ function formatDate(dateStr: string) {
             </a>
         ))}
     </div>
-
-	<hr />
+    <hr />
 	<h1 class="page-title">Socials</h1>
 	<Socials />
 </Layout>

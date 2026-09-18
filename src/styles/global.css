@@ -26,6 +26,10 @@ hr {
   margin: 2.5rem 0;
 }
 
+h1 {
+    color: var(--accent);
+}
+
 /* Navbar */
 .navbar {
   border-bottom: 1px solid var(--border);

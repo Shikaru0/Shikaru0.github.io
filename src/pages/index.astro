@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Socials from '../components/Socials.astro';
 import { getGithubRepos } from '../lib/github';
 
 const repos = await getGithubRepos();
@@ -42,4 +43,8 @@ function formatDate(dateStr: string) {
             </a>
         ))}
     </div>
+
+	<hr />
+	<h1 class="page-title">Socials</h1>
+	<Socials />
 </Layout>

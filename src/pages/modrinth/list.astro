@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getModrinthProjects } from '../../lib/modrinth';
+
+const projects = await getModrinthProjects();
+---
+
+<Layout title="All Repositories">
+    <h1 class="page-title">All projects</h1>
+    <div class="url-list">
+        {projects.map((project) => (
+            <a href={`${project.html_url}`} class="url-item">
+                {project.title} <span style="opacity: 0; transition: opacity 0.2s;">→</span>
+            </a>
+        ))}
+    </div>
+</Layout>
+
+<style>
+  .url-item:hover span {
+    opacity: 1 !important;
+  }
+</style>
